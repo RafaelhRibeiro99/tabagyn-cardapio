@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block body %}
+<div class="login-wrap"><form class="panel login" method="post"><div class="brand">TABAGYN</div><p class="muted">Acesso da equipe</p>
+{% if error %}<div class="error">{{error}}</div>{% endif %}
+<label>Usuário</label><input name="username" required><label>Senha</label><input type="password" name="password" required>
+<button>ENTRAR</button><a class="back" href="/">← Voltar ao cardápio</a></form></div>{% endblock %}

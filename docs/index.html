@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101a16">
+  <meta name="description" content="Seu momento na TabaGyn. Explore o cardápio, monte sua sessão e faça seu pedido na mesa.">
+  <title>TabaGyn · Cardápio</title>
+  <link rel="stylesheet" href="/assets/menu.css?v=lounge-1">
+  <script src="./cardapio.js" defer></script>
+  <script src="./app.js?v=lounge-2" defer></script>
+</head>
+<body class="menu-page">
+  <a class="skip-link" href="#cardapio">Ir para o cardápio</a>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="TabaGyn, início"><img src="/assets/logo.png" alt="" width="48" height="48"><span>TABAGYN<small>TABACARIA & LOUNGE</small></span></a>
+    <span class="header-note"><i aria-hidden="true"></i> Bons encontros. Bons momentos.</span>
+    <button id="openCart" class="cart-link" type="button" aria-label="Verificar carrinho" aria-haspopup="dialog" aria-controls="cartDialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14l1 14H4L5 7Zm3 0V5a4 4 0 0 1 8 0v2"/></svg><span>Carrinho</span><b id="count">0</b></button>
+  </header>
+  <main>
+    <section class="lounge-hero" aria-labelledby="welcomeTitle">
+      <div class="hero-copy"><p class="eyebrow"><span></span> SEU PONTO DE ENCONTRO</p><h1 id="welcomeTitle">Seu encontro.<br>Seu <em>momento.</em></h1><p>Uma sessão do seu jeito, um brinde e tempo para aproveitar.</p><a class="hero-link" href="#cardapio">Encontre seu favorito <span aria-hidden="true">↓</span></a></div>
+      <div class="hero-signature" aria-hidden="true"><div class="signature-ring"><img src="/assets/logo.png" alt="" width="240" height="240"></div><span>DESDE 2018</span></div>
+    </section>
+    <div class="service-strip"><span><i aria-hidden="true"></i> Aproveite aqui na TabaGyn</span><span>Pedidos na mesa <b aria-hidden="true">·</b> Sem entrega</span></div>
+    <div class="catalog-heading"><div><p class="eyebrow">ESCOLHA. COMBINE. APROVEITE.</p><h2>O que vai ser hoje?</h2></div><label class="search-box" for="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" type="search" placeholder="Buscar no cardápio" autocomplete="off" aria-label="Buscar no cardápio"></label></div>
+    <p id="demo" class="notice" hidden>Cardápio de demonstração. Produtos e preços ilustrativos.</p>
+    <div id="cardapio" class="menu-toolbar"><nav id="categories" aria-label="Categorias"></nav><span>NO SEU RITMO.</span></div>
+    <p id="searchStatus" class="search-status" role="status" hidden></p>
+    <div id="menu"></div>
+  </main>
+  <dialog id="cartDialog" class="session-dialog cart-dialog" aria-labelledby="cartTitle">
+    <button id="closeCart" class="quiet cart-back" type="button">← Continuar escolhendo</button>
+    <div id="pedido"><p class="eyebrow">MAIS UM BOM MOMENTO</p><div class="order-head"><h2 id="cartTitle">Seu carrinho</h2><button id="clear" class="quiet" type="button">Limpar</button></div><p class="cart-service">Pedido para consumir aqui na TabaGyn.</p><div id="items"></div>
+      <form id="checkout">
+        <div class="checkout-fields"><div><label for="table">Sua mesa <span>(obrigatório)</span></label><input id="table" maxlength="20" placeholder="Ex.: 08" required></div><div><label for="name">Seu nome <span>(opcional)</span></label><input id="name" maxlength="80" autocomplete="given-name" placeholder="Como te chamamos?"></div></div>
+        <label for="notes">Algum detalhe? <span>(opcional)</span></label><textarea id="notes" maxlength="500" rows="2" placeholder="Conte aqui as observações do pedido"></textarea>
+        <div class="checkout-bottom"><div class="total"><span>Total do pedido<small>Consumo no local · Sem entrega</small></span><strong id="total">R$ 0,00</strong></div><p id="status" role="status"></p><button id="finishOrder" class="send" type="submit">Finalizar pedido <span aria-hidden="true">↗</span></button><p class="hint">Seu pedido abre no WhatsApp. Revise a mensagem e toque em enviar.</p></div>
+      </form>
+    </div>
+  </dialog>
+  <dialog id="sessionDialog" class="session-dialog" aria-labelledby="sessionTitle" aria-describedby="sessionInstructions">
+    <div class="session-heading"><div><p class="eyebrow">DO SEU JEITO</p><h2 id="sessionTitle">Monte sua sessão</h2></div><button id="closeSession" type="button" class="quiet close-button" aria-label="Fechar montagem da sessão">✕</button></div>
+    <p id="sessionInstructions" class="muted">Escolha os sabores e indique a porcentagem de cada um. A mistura precisa completar 100%.</p><div id="essenceChoices" class="essence-choices"></div>
+    <div class="mix-footer"><div class="mix-total"><label for="mixProgress">Sua mistura <strong id="mixTotal">0%</strong></label><progress id="mixProgress" max="100" value="0">0%</progress></div><p id="mixStatus" role="status" aria-live="polite"></p><button id="addSession" type="button" disabled>Adicionar sessão</button></div>
+  </dialog>
+  <footer><a class="footer-brand" href="#">TABAGYN<span>O melhor do encontro é estar aqui.</span></a><a href="/admin/cadastros">Acesso da loja ↗</a></footer>
+  <div class="cart-dock"><button id="mobileCart" class="mobile-cart" type="button" aria-haspopup="dialog"><span class="dock-label"><b id="mobileCount">0</b><span>Verificar carrinho<small>Seu momento está quase pronto</small></span></span><span class="dock-price"><strong id="mobileTotal">R$ 0,00</strong><span aria-hidden="true">→</span></span></button></div>
+  <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+  <noscript>Ative o JavaScript para visualizar o cardápio e montar seu pedido.</noscript>
+</body>
+</html>
