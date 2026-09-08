@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex"><title>TabaGyn · Acesso da loja</title>
+  <link rel="stylesheet" href="./admin.css">
+  <script src="./supabase-config.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/dist/umd/supabase.js" defer></script>
+  <script src="./admin.js" defer></script>
+</head>
+<body>
+  <header><a href="./index.html">← Cardápio</a><strong>TABAGYN · Acesso da loja</strong><button id="logout" hidden>Sair</button></header>
+  <main>
+    <p id="status" role="status" aria-live="polite"></p>
+    <section id="loginPanel">
+      <h1>Bem-vindo à loja</h1><p>Entre para atualizar o cardápio.</p>
+      <form id="loginForm">
+        <label>E-mail<input id="email" type="email" autocomplete="username" required></label>
+        <label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+        <button type="submit">Entrar</button>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <h1>Seu cardápio</h1><p>As alterações salvas ficam disponíveis quando o cliente abre ou atualiza o cardápio.</p>
+      <nav aria-label="Cadastros"><button data-tab="produtos">Produtos</button><button data-tab="essencias">Essências</button><button data-tab="settings">Configurações</button></nav>
+      <div class="actions"><button id="newItem">Novo produto</button><button id="reload" class="secondary">Atualizar lista</button></div>
+      <div id="list"></div>
+      <form id="settingsForm" hidden>
+        <h2>Configurações da loja</h2>
+        <label>WhatsApp (país + DDD + número)<input id="phone" inputmode="tel" required pattern="[1-9][0-9]{9,14}" maxlength="15"></label>
+        <label class="check"><input id="demoMode" type="checkbox">Cardápio de demonstração</label>
+        <button type="submit">Salvar configurações</button>
+      </form>
+    </section>
+  </main>
+  <dialog id="editor">
+    <form id="itemForm">
+      <h2 id="editorTitle">Produto</h2>
+      <div id="productFields">
+        <label>Nome<input id="productName" maxlength="120"></label>
+        <label>Categoria<select id="category"></select></label>
+        <label>Preço (R$)<input id="price" inputmode="decimal" placeholder="25,00"></label>
+        <label>Descrição<textarea id="description" maxlength="1000" rows="3"></textarea></label>
+        <label class="check"><input id="session" type="checkbox">Permitir montagem de mistura</label>
+      </div>
+      <div id="essenceFields" hidden>
+        <label>Marca<input id="brand" maxlength="100"></label>
+        <label>Sabor<input id="flavor" maxlength="100"></label>
+        <fieldset><legend>Disponível nestas sessões</legend><div id="sessions"></div></fieldset>
+      </div>
+      <label class="check"><input id="available" type="checkbox">Disponível no cardápio</label>
+      <img id="preview" class="preview" alt="Foto do cadastro" hidden>
+      <label>Foto (JPG, PNG ou WebP, até 5 MB)<input id="photo" type="file" accept="image/jpeg,image/png,image/webp"></label>
+      <label class="check"><input id="removePhoto" type="checkbox">Remover foto atual</label>
+      <p id="editorStatus" role="status"></p>
+      <div class="actions"><button id="saveItem" type="submit">Salvar</button><button id="cancelEdit" type="button" class="secondary">Cancelar</button></div>
+    </form>
+  </dialog>
+</body>
+</html>

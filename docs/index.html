@@ -8,7 +8,9 @@
   <title>TabaGyn · Cardápio</title>
   <link rel="stylesheet" href="./menu.css?v=lounge-1">
   <script src="./cardapio.js" defer></script>
-  <script src="./app.js?v=checkout-3" defer></script>
+  <script src="./supabase-config.js?v=cloud-1" defer></script>
+  <script src="./catalog-loader.js?v=cloud-1" defer></script>
+  <script src="./app.js?v=cloud-1" defer></script>
 </head>
 <body class="menu-page">
   <a class="skip-link" href="#cardapio">Ir para o cardápio</a>
@@ -44,7 +46,7 @@
     <p id="sessionInstructions" class="muted">Escolha os sabores e indique a porcentagem de cada um. A mistura precisa completar 100%.</p><div id="essenceChoices" class="essence-choices"></div>
     <div class="mix-footer"><div class="mix-total"><label for="mixProgress">Sua mistura <strong id="mixTotal">0%</strong></label><progress id="mixProgress" max="100" value="0">0%</progress></div><p id="mixStatus" role="status" aria-live="polite"></p><button id="addSession" type="button" disabled>Adicionar sessão</button></div>
   </dialog>
-  <footer><a class="footer-brand" href="#">TABAGYN<span>O melhor do encontro é estar aqui.</span></a></footer>
+  <footer><a class="footer-brand" href="#">TABAGYN<span>O melhor do encontro é estar aqui.</span></a><a href="./admin.html">Acesso da loja ↗</a></footer>
   <div class="cart-dock"><button id="mobileCart" class="mobile-cart" type="button" aria-haspopup="dialog"><span class="dock-label"><b id="mobileCount">0</b><span>Verificar carrinho<small>Seu momento está quase pronto</small></span></span><span class="dock-price"><strong id="mobileTotal">R$ 0,00</strong><span aria-hidden="true">→</span></span></button></div>
   <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
   <noscript>Ative o JavaScript para visualizar o cardápio e montar seu pedido.</noscript>

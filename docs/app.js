@@ -1,5 +1,13 @@
-(() => {
+(async () => {
   "use strict";
+  if (window.loadStoreCatalog) {
+    try { await window.loadStoreCatalog(); }
+    catch {
+      document.getElementById("menu").textContent = "Não foi possível carregar o cardápio. Atualize a página para tentar novamente.";
+      document.getElementById("finishOrder").disabled = true;
+      return;
+    }
+  }
   const config = window.CARDAPIO;
   const cart = new Map();
   const $ = id => document.getElementById(id);
