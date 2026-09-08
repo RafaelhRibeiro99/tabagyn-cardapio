@@ -1,0 +1,3 @@
+[functions.create-store-user]
+# The handler validates the bearer token with Auth.getUser before every write.
+verify_jwt = false

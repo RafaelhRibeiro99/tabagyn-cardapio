@@ -7,6 +7,8 @@ Site em HTML, CSS e JavaScript no GitHub Pages, com Supabase para catálogo, log
 
 ## Atualizar o cardápio
 
+Na aba **Usuários** do painel, cadastre novas contas por e-mail e senha. Todas recebem acesso completo para alterar produtos, essências, configurações e cadastrar outros usuários. Para disponibilizar esse recurso online, publique a função `create-store-user` conforme [as instruções do Supabase](supabase/README.md#cadastro-de-usuários-pelo-painel).
+
 Abra **Acesso da loja**, no rodapé, e entre com o e-mail e a senha criados no Supabase. Em **Produtos** e **Essências**, cadastre ou edite os itens, preços, disponibilidade e fotos. Em **Configurações**, altere WhatsApp e modo de demonstração. Clique em **Salvar**; clientes verão a atualização ao abrir ou atualizar o cardápio.
 
 Sessões precisam de essências vinculadas para permitir uma mistura de 100%. Misturas diferentes ficam separadas no carrinho. O painel aceita JPG, PNG e WebP de até 5 MB e 20 megapixels, convertidos para JPEG de até 1200 pixels. Fotos antigas ficam no Storage até limpeza manual.

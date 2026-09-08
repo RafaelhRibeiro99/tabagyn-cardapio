@@ -22,9 +22,19 @@
     </section>
     <section id="workspace" hidden>
       <h1>Seu cardápio</h1><p>As alterações salvas ficam disponíveis quando o cliente abre ou atualiza o cardápio.</p>
-      <nav aria-label="Cadastros"><button data-tab="produtos">Produtos</button><button data-tab="essencias">Essências</button><button data-tab="settings">Configurações</button></nav>
+      <nav aria-label="Cadastros"><button data-tab="produtos">Produtos</button><button data-tab="essencias">Essências</button><button data-tab="settings">Configurações</button><button data-tab="users">Usuários</button></nav>
       <div class="actions"><button id="newItem">Novo produto</button><button id="reload" class="secondary">Atualizar lista</button></div>
       <div id="list"></div>
+      <form id="userForm" hidden>
+        <h2>Cadastrar usuário</h2>
+        <p>Todos os usuários cadastrados aqui têm acesso completo: podem alterar o cardápio, as configurações e cadastrar novos usuários.</p>
+        <label>E-mail<input id="newEmail" type="email" autocomplete="off" maxlength="254" required></label>
+        <label>Senha<input id="newPassword" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></label>
+        <label>Confirmar senha<input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></label>
+        <p>Use uma senha de pelo menos 8 caracteres. A nova conta poderá entrar com esse e-mail e senha.</p>
+        <button type="submit">Cadastrar usuário</button>
+        <p id="userStatus" role="status" aria-live="polite"></p>
+      </form>
       <form id="settingsForm" hidden>
         <h2>Configurações da loja</h2>
         <label>WhatsApp (país + DDD + número)<input id="phone" inputmode="tel" required pattern="[1-9][0-9]{9,14}" maxlength="15"></label>

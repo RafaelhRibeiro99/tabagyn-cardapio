@@ -1,5 +1,22 @@
 # Configurar o acesso da loja
 
+## Cadastro de usuários pelo painel
+
+Na aba **Usuários**, qualquer usuário autorizado pode cadastrar e-mail e senha. A nova conta recebe as mesmas permissões completas, inclusive cadastrar outras contas, sem encerrar a sessão de quem fez o cadastro. O cadastro público deve continuar desativado.
+
+Para ativar em um projeto existente:
+
+1. Execute no SQL Editor: `grant select, insert on public.store_admins to service_role;` (também incluído em `setup.sql`).
+2. Publique a Edge Function: `supabase functions deploy create-store-user --project-ref dwmjvpoaaqgsfssogpgk`. Execute na raiz do repositório, com a CLI autenticada. `supabase/config.toml` desativa a validação JWT legada do gateway; a função valida o token com `auth.getUser` e verifica `store_admins` antes de criar qualquer conta.
+3. Publique os arquivos atualizados de `docs/` no GitHub Pages.
+4. Entre com uma conta autorizada, cadastre outra em **Usuários**, entre com ela em outra sessão e confira a edição de um item e o cadastro de uma terceira conta.
+
+A função usa `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY`, fornecidas pelo ambiente do Supabase. Nenhuma chave administrativa vai para o navegador. A criação segue a [API administrativa do Supabase](https://supabase.com/docs/reference/javascript/auth-admin-createuser). Contas criadas pelo painel já ficam com e-mail confirmado. Se a concessão de acesso falhar, a função tenta desfazer a conta e informa quando for necessária correção manual.
+
+Testes simulados: `node tests/admin.cjs` e `node tests/create_store_user.cjs`. A publicação e o teste no Supabase real são necessários para disponibilizar o cadastro online.
+
+## Configuração inicial
+
 O site continua no GitHub Pages. O painel usa Supabase Auth; apenas usuários cadastrados em `store_admins` podem salvar o catálogo e enviar fotos. Criar uma conta no Auth, por si só, não concede acesso administrativo.
 
 1. No Supabase, abra **SQL Editor → New query**, cole todo o conteúdo de `setup.sql` e clique em **Run**. O script cria as tabelas, permissões, armazenamento de imagens e importa o catálogo atual sem sobrescrever um catálogo existente.

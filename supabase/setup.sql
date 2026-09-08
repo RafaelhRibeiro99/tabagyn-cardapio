@@ -7,6 +7,7 @@ create table if not exists public.store_admins (
 alter table public.store_admins enable row level security;
 revoke all on public.store_admins from anon, authenticated;
 grant select on public.store_admins to authenticated;
+grant select, insert on public.store_admins to service_role;
 drop policy if exists "Read own admin membership" on public.store_admins;
 create policy "Read own admin membership" on public.store_admins
   for select to authenticated using (user_id = (select auth.uid()));

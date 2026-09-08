@@ -55,16 +55,20 @@
   });
   $("logout").addEventListener("click", async () => {
     await client.auth.signOut({scope:"local"});
+    $("userForm").reset(); $("userStatus").textContent = "";
     catalog = null; $("workspace").hidden = true; $("logout").hidden = true; $("loginPanel").hidden = false; message("Você saiu da conta.");
   });
   function render() {
     document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-current",String(b.dataset.tab === tab)));
-    $("settingsForm").hidden = tab !== "settings"; $("list").hidden = tab === "settings";
-    $("newItem").hidden = tab === "settings";
+    const itemsTab = tab === "produtos" || tab === "essencias";
+    $("settingsForm").hidden = tab !== "settings"; $("list").hidden = !itemsTab;
+    $("userForm").hidden = tab !== "users";
+    $("reload").hidden = tab === "users";
+    $("newItem").hidden = !itemsTab;
     $("newItem").textContent = tab === "essencias" ? "Nova essência" : "Novo produto";
     $("phone").value = catalog.whatsapp; $("demoMode").checked = catalog.demonstracao;
     $("list").replaceChildren();
-    if (tab === "settings") return;
+    if (!itemsTab) return;
     for (const item of catalog[tab]) {
       const row = node("div"); row.className = "row";
       const info = node("div"); info.append(node("strong",tab === "produtos" ? item.nome : `${item.marca} · ${item.sabor}`));
@@ -155,6 +159,30 @@
       await saveCatalog(next); $("editor").close(); message("Cadastro salvo.");
     } catch (error) { $("editorStatus").textContent = error.message === "photo" ? "Use uma imagem JPG, PNG ou WebP de até 5 MB e 20 megapixels." : failure(error); }
     finally { setBusy(false); }
+  });
+  $("userForm").addEventListener("submit", async event => {
+    event.preventDefault(); if (busy) return;
+    const email = $("newEmail").value.trim();
+    const password = $("newPassword").value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || password.length < 8 || password.length > 72) {
+      $("userStatus").textContent = "Informe um e-mail válido e uma senha entre 8 e 72 caracteres."; return;
+    }
+    if (password !== $("confirmPassword").value) {
+      $("userStatus").textContent = "As senhas não coincidem."; return;
+    }
+    setBusy(true); $("userStatus").textContent = "Cadastrando usuário…";
+    try {
+      const {data,error} = await client.functions.invoke("create-store-user", {body:{email,password}});
+      if (error) {
+        let detail;
+        try { detail = await error.context?.json(); } catch (_) { /* Network or non-JSON response. */ }
+        throw new Error(detail?.error || "Não foi possível confirmar o cadastro. Confira a conexão e se a função create-store-user está publicada no Supabase.");
+      }
+      if (!data?.user?.id) throw new Error("O cadastro não foi confirmado. Confira no Supabase antes de tentar novamente.");
+      $("userForm").reset();
+      $("userStatus").textContent = `Usuário ${data.user.email} cadastrado com acesso completo. Já pode entrar e cadastrar novos usuários.`;
+    } catch (error) { $("userStatus").textContent = error.message; }
+    finally { $("newPassword").value = ""; $("confirmPassword").value = ""; setBusy(false); }
   });
   $("settingsForm").addEventListener("submit", async event => {
     event.preventDefault(); if (busy) return; setBusy(true);
