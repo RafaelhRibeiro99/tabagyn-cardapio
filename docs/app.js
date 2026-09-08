@@ -284,9 +284,10 @@
     for (const [id, label] of [["name", "Nome"], ["table", "Mesa"], ["notes", "Observações"]]) {
       const value = $(id).value.trim(); if (value) lines.push(`${label}: ${value}`);
     }
-    lines.push("", "Aguardo a confirmação de disponibilidade e valores.");
-    $("status").textContent = "Revise a mensagem e toque em enviar no WhatsApp.";
     window.open(`https://wa.me/${phone}?text=${encodeURIComponent(lines.join("\n"))}`, "_blank", "noopener,noreferrer");
+    cart.clear();
+    renderCart();
+    $("status").textContent = "Revise a mensagem e toque em enviar no WhatsApp.";
   });
   renderCart();
 })();

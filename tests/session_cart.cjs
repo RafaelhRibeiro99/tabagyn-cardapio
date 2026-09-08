@@ -46,6 +46,12 @@ for (const missingTable of ['', '   ']) {
 ids.table.value='08';
 ids.checkout.events.submit({preventDefault(){}});const message=new URL(opened).searchParams.get('text');assert.match(message,/Brand A · Flavor A: 60%/);assert.match(message,/Brand B · Flavor B: 40%/);assert.match(message,/100%/);assert.match(message,/81,00/);assert.doesNotMatch(message,/Hidden flavor/);
 assert.match(message,/Mesa: 08/);
+assert.doesNotMatch(message,/Aguardo a confirmação/);
+assert.equal(ids.count.textContent,0,'Checkout clears the cart after composing the full message');
+assert.equal(ids.mobileCount.textContent,0);
+assert.match(ids.total.textContent,/0,00/);
+assert.match(ids.mobileTotal.textContent,/0,00/);
+assert.equal(ids.finishOrder.disabled,true);
 console.log('PASS: table required, whitespace rejected and valid table included in WhatsApp.');
 ids.clear.events.click();assert.equal(ids.count.textContent,0);assert.equal(ids.mobileCart.hidden,false);
 // Search must hide unmatched categories and recover when cleared.
@@ -72,6 +78,10 @@ ids.checkout.events.submit({preventDefault(){}});
 const checkoutUrl=new URL(opened); assert.equal(checkoutUrl.pathname,'/5562992114211');
 assert.match(checkoutUrl.searchParams.get('text'),/Mesa: 08/); assert.match(checkoutUrl.searchParams.get('text'),/Sem gelo/);
 assert.match(checkoutUrl.searchParams.get('text'),/sem entrega/);
+assert.equal(ids.count.textContent,0);
+const previousUrl=opened;
+ids.checkout.events.submit({preventDefault(){}});
+assert.equal(opened,previousUrl,'Empty cart cannot send the previous order again');
 console.log('PASS: cart opens and closes, empty checkout disabled, destination phone, table and notes.');
 
 // Unavailable products cannot enter the cart through title or stale add actions.
