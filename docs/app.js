@@ -1,11 +1,11 @@
-﻿(() => {
+(() => {
   "use strict";
   const config = window.CARDAPIO;
   const cart = new Map();
   const $ = id => document.getElementById(id);
   const money = cents => (cents / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const products = config.produtos.filter(p => Number.isSafeInteger(p.preco) && p.preco >= 0);
-  const essences = config.essencias || [];
+  const essences = (config.essencias || []).filter(e => e.disponivel !== false);
   const isSession = p => p.sessao || config.categorias.find(c => c.id === p.categoria)?.nome === "Sessões";
   function element(tag, text, className) {
     const node = document.createElement(tag);
@@ -118,7 +118,7 @@
       const row = element("div", undefined, "essence-choice");
       const label = element("label", undefined, "essence-label");
       const check = element("input"); check.type = "checkbox";
-      const photo = element("img"); photo.src = essence.imagem || "/assets/logo.png";
+      const photo = element("img"); photo.src = essence.imagem || "./logo.png";
       photo.alt = essence.imagem ? `${essence.marca} ${essence.sabor}` : "";
       photo.loading = "lazy";
       const caption = element("span"); caption.append(element("small", essence.marca), element("strong", essence.sabor));
@@ -167,7 +167,7 @@
   function illustration(category, name = "") {
     const kind = category === "Sessões" ? "session" : category === "Drinks" ? "drinks"
       : category === "Doces" ? "sweet" : normalize(name).includes("agua") ? "bottle" : "glass";
-    const art = element("img"); art.src = `/assets/menu-${kind}.svg`; art.alt = ""; art.loading = "lazy";
+    const art = element("img"); art.src = `./menu-${kind}.svg`; art.alt = ""; art.loading = "lazy";
     return art;
   }
   function activateCategory(active) {

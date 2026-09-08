@@ -1,68 +1,41 @@
-# TABAGYN — cardápio com administração simples
+# TABAGYN — cardápio estático
 
-A aplicação usa FastAPI e um arquivo SQLite. O cliente monta o carrinho e envia a mensagem pelo WhatsApp; o administrador altera preços, cadastra produtos e envia fotos pelo navegador, inclusive pelo celular. Não usa PostgreSQL e não armazena pedidos.
+HTML, CSS e JavaScript, sem Python, instalação ou banco de dados. Abra `docs/index.html` no navegador para visualizar localmente.
 
-O cardápio atende pedidos para consumo na TabaGyn, sem entrega. **Verificar carrinho** abre os itens, quantidades e total em uma janela separada. A mesa é obrigatória para finalizar; nome e observações são opcionais. **Finalizar pedido** abre a mensagem no WhatsApp da loja, configurado inicialmente como **(62) 99211-4211** (`5562992114211`). O cliente revisa a mensagem e toca em enviar.
+## Publicar no GitHub Pages
 
-## Abrir
+1. Envie as alterações ao seu repositório no GitHub.
+2. Abra **Settings → Pages**.
+3. Em **Source**, selecione **Deploy from a branch**.
+4. Escolha a branch que recebeu os arquivos (normalmente `main`) e a pasta **/docs**. Clique em **Save**.
+5. Aguarde e abra o endereço informado pelo GitHub, normalmente `https://SEU-USUARIO.github.io/TABAGYN/`.
 
-No PowerShell, na pasta do projeto:
+Não há comando de build. Publique somente a pasta `docs/`.
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.txt
-.\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
+## Atualizar pelo GitHub
 
-Cardápio: http://127.0.0.1:8000/ · Administração: http://127.0.0.1:8000/admin
+Abra `docs/cardapio.js`, clique no lápis, edite e use **Commit changes**. Aguarde a publicação e atualize o navegador. A permissão de edição fica no GitHub; o site não tem painel administrativo.
 
-O servidor deve ficar aberto. O cardápio depende do FastAPI para carregar os arquivos em `/assets`, o catálogo atualizado e o painel. Usar `http.server` ou abrir o HTML diretamente não substitui esse servidor.
+- `whatsapp`: país + DDD + número, somente dígitos.
+- `demonstracao`: `true` identifica o catálogo como teste; `false` desativa o aviso.
+- `categorias`: cada categoria tem `id`, `nome` e `descricao`.
+- `produtos`: cada produto tem `id` único, `categoria` correspondente ao ID da categoria, `nome`, `descricao`, `preco` em centavos (1250 = R$ 12,50), `disponivel`, `sessao` e `imagem`.
+- `essencias`: cada essência tem `id` único, `marca`, `sabor`, `disponivel`, `imagem` e `sessoes`, uma lista de IDs dos produtos de sessão aos quais está vinculada.
 
-## Configurar
+Para adicionar itens, copie um objeto existente e atribua um novo ID. Separe objetos com vírgulas e preserve aspas, colchetes e chaves. Ao mudar um ID, atualize também seus vínculos.
 
-Entre em `/admin`. Use **Novo produto** para cadastrar, **Editar** para alterar nome, categoria, preço, descrição, foto ou disponibilidade. JPG, PNG e WebP de até 5 MB e 20 megapixels são aceitos; as fotos são convertidas em JPEG, redimensionadas e ficam sem metadados da câmera. As categorias disponíveis são Sessões, Bebidas, Drinks, Esquine e Doces.
+Envie fotos JPG, PNG ou WebP para `docs/uploads/` com **Add file → Upload files**. No produto ou essência, use `imagem: "./uploads/nome-da-foto.jpg"` (mantendo as aspas na chave, como no arquivo). Use fotos compactas e nomes sem espaços. O valor `null` usa a ilustração padrão.
 
-Em **Configurações da loja**, altere o WhatsApp e desmarque a demonstração quando os produtos e preços reais estiverem cadastrados. As alterações são salvas imediatamente; clientes que já estão com a página aberta precisam atualizá-la.
+Sessões precisam de `sessao: true` e essências disponíveis vinculadas ao seu ID. Sem essências, a adição fica bloqueada. A mistura precisa completar 100%; misturas diferentes ficam separadas no carrinho. Cadastre somente essências sem tabaco e sem nicotina.
 
-Em uma instalação nova, defina `ADMIN_USERNAME` e `ADMIN_PASSWORD` no ambiente privado antes de iniciar pela primeira vez. A senha será armazenada somente como hash Argon2. Depois da criação, essas variáveis podem ser removidas. Elas não sobrescrevem um administrador existente. Nenhuma senha é incluída nos arquivos públicos.
+## Pedidos e dados
 
-O cliente precisa enviar a mensagem no WhatsApp. A loja confirma disponibilidade e valores. O site não confirma automaticamente pedidos nem pagamentos.
+O cliente informa a mesa e finaliza pelo WhatsApp; nome e observações são opcionais. Ele revisa e envia a mensagem. A loja confirma disponibilidade e valores. O site não armazena pedidos; recarregar a página reinicia o carrinho.
 
-## Dados
-
-O carrinho e os campos existem somente na página aberta. Recarregar a página reinicia o carrinho. Não há histórico no site nem rotina de exclusão após alguns dias. Mensagens enviadas ficam no WhatsApp, conforme as configurações e ações dos participantes.
-
-O catálogo, o administrador e as fotos ficam em `data/` (ou `DATA_DIR`). Faça backup dessa pasta com o servidor parado. Não apague essa pasta para atualizar o sistema.
-
-## Publicar
-
-Guarde o código no GitHub e use uma hospedagem com Python ou Docker, HTTPS e disco persistente. O painel não funciona em hospedagem apenas estática. O `Dockerfile` está pronto e escuta na porta 8000. Monte um volume persistente em `/data`; use uma única instância do aplicativo para esse banco SQLite.
-
-Na hospedagem, configure:
-
-- `DATA_DIR=/data` (ou o caminho do disco persistente).
-- `SECRET_KEY`: chave aleatória com pelo menos 32 caracteres, estável entre reinicializações.
-- `COOKIE_SECURE=true` para acesso por HTTPS.
-- `ADMIN_USERNAME` e `ADMIN_PASSWORD`: somente para a primeira inicialização.
-
-O comando de início sem Docker é `python -m uvicorn app.main:app --host 0.0.0.0 --port 8000`. Configure a porta exigida pela hospedagem. Para levar os dados locais, copie o conteúdo de `data/` para o volume persistente com ambos os servidores parados. Nunca coloque esse conteúdo no repositório público. Exponha o serviço por HTTPS através da hospedagem; o servidor local usa HTTP somente para teste.
-
-O GitHub Pages não permite sites destinados principalmente a facilitar transações comerciais: https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
-
-Não publique `.env`, `.venv` ou `data/` no GitHub. O `.gitignore` e o `.dockerignore` já excluem esses dados. Os arquivos antigos `app/routers`, `app/database.py`, `app/models.py`, `init_db.py` e `create_admin.py` não são usados pela nova aplicação; não execute os antigos inicializadores PostgreSQL.
+O catálogo foi migrado do banco local, incluindo produtos, essências e fotos referenciadas. `data/` permanece como backup privado e não é usada pelo site. `.env`, `.venv` e `data/` continuam ignorados pelo Git. Nunca envie credenciais ou bancos para `docs/`: seu conteúdo é público.
 
 ## Verificação
 
-Execute `.\.venv\Scripts\python.exe -m unittest discover -s tests -v`. Os testes iniciam um servidor isolado, com banco temporário, e verificam autenticação, proteção de alterações, preços, fotos, configurações e persistência após reiniciar. Não enviam mensagens pelo WhatsApp e não alteram o catálogo da loja.
+Com Node.js, execute `node tests/session_cart.cjs` e `node --check docs/cardapio.js`. Node só é necessário para esses testes, não para publicar ou usar o site.
 
-## Sessões e essências
-
-Produtos da categoria **Sessões** abrem a montagem de mistura; as outras categorias continuam com adição direta ao carrinho.
-
-Em **Administração → Essências**, cadastre marca, sabor, foto e disponibilidade. Marque em quais sessões a essência pode aparecer. Uma essência sem sessões marcadas não aparece para clientes; uma essência indisponível também fica oculta. Este cadastro é destinado às essências sem tabaco e sem nicotina confirmadas para a loja.
-
-O cliente informa porcentagens inteiras de 1 a 100 para os sabores escolhidos. O total não ultrapassa 100%, e somente uma mistura completa pode ser adicionada. Marca, sabor e porcentagem aparecem no carrinho e na mensagem do WhatsApp. Misturas diferentes da mesma sessão ficam em linhas separadas; misturas iguais somam quantidade. As essências não alteram o preço da sessão.
-
-Cadastre as essências reais antes de receber pedidos de sessão: sem opções vinculadas, a janela informa que não há essências disponíveis e bloqueia a adição. Cadastros e vínculos ficam no mesmo banco em `DATA_DIR`, junto ao catálogo existente.
-
-Teste das interações do carrinho: `node tests/session_cart.cjs`.
+Documentação: [criar um site no Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site). Confira também as [restrições de uso comercial](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) para avaliar a adequação à loja. Os mesmos arquivos funcionam em outras hospedagens estáticas.
